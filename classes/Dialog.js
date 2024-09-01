@@ -20,6 +20,10 @@ export default class Dialog {
         </form>
       </div>`;
     dialogElement.showModal();
+
+    // focus the input element
+    document.forms.dialog.elements.answer?.focus();
+
     // for styling purposes:
     document.body.setAttribute('dialogOpen', true);
 
