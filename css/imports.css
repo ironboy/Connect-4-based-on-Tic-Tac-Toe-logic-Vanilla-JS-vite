@@ -1,0 +1,13 @@
+/* Google Fonts - Bebas Neue and Protest Guerilla */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Protest+Guerrilla&display=swap');
+/* Basic setup - box sizing + get main to stay in the middle verically*/
+@import 'basic-setup.css';
+/* Styling for some common elements */
+@import 'common.css';
+/* The board */
+@import 'board.css';
+@import 'board-interactivity.css';
+/* Dialogs */
+@import 'dialog.css';
+/* Image placement of decorative images */
+@import 'image-placement.css';

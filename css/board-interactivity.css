@@ -1,0 +1,104 @@
+/* show which cells that are clickable */
+body[gameInProgress="true"] {
+
+  .cell:not(.X, .O) {
+    cursor: pointer;
+  }
+
+  /* pre-show the what a move would result in on hover/mouseover */
+
+  &[currentPlayerColor="X"]:not(&[moveInProgress="true"]) {
+
+    .cell:hover,
+    .cell:nth-of-type(7n+1):hover~.cell:nth-of-type(7n+1),
+    .cell:nth-of-type(7n+2):hover~.cell:nth-of-type(7n+2),
+    .cell:nth-of-type(7n+3):hover~.cell:nth-of-type(7n+3),
+    .cell:nth-of-type(7n+4):hover~.cell:nth-of-type(7n+4),
+    .cell:nth-of-type(7n+5):hover~.cell:nth-of-type(7n+5),
+    .cell:nth-of-type(7n+6):hover~.cell:nth-of-type(7n+6),
+    .cell:nth-of-type(7n+7):hover~.cell:nth-of-type(7n+7) {
+      &.first-free {
+        &::before {
+          content: '?';
+          font-size: 6cqw;
+          padding-top: 1cqw;
+          color: white;
+          background-color: var(--red-player);
+          opacity: 1;
+          border: 10px dashed var(--background-color);
+          animation: rotate 8s linear infinite;
+        }
+      }
+    }
+  }
+
+  &[currentPlayerColor="O"]:not(&[moveInProgress="true"]) {
+
+    .cell:hover,
+    .cell:nth-of-type(7n+1):hover~.cell:nth-of-type(7n+1),
+    .cell:nth-of-type(7n+2):hover~.cell:nth-of-type(7n+2),
+    .cell:nth-of-type(7n+3):hover~.cell:nth-of-type(7n+3),
+    .cell:nth-of-type(7n+4):hover~.cell:nth-of-type(7n+4),
+    .cell:nth-of-type(7n+5):hover~.cell:nth-of-type(7n+5),
+    .cell:nth-of-type(7n+6):hover~.cell:nth-of-type(7n+6),
+    .cell:nth-of-type(7n+7):hover~.cell:nth-of-type(7n+7) {
+      &.first-free {
+        &::before {
+          content: '?';
+          font-size: 6cqw;
+          padding-top: 1cqw;
+          color: black;
+          background-color: var(--yellow-player);
+          opacity: 1;
+          border: 10px dashed var(--background-color);
+          animation: rotate 8s linear infinite;
+        }
+      }
+    }
+  }
+
+}
+
+/* show the latest move made, with a  shaking + rotating animation */
+
+.cell.latest-move::before {
+  animation: shake 0.3s ease-out 3;
+}
+
+.cell.latest-move::after {
+  animation: shake-and-rotate 0.3s ease-out 3;
+}
+
+@keyframes shake {
+  50% {
+    top: 0;
+  }
+
+  100% {
+    top: 7%;
+  }
+}
+
+@keyframes shake-and-rotate {
+  50% {
+    top: 0;
+  }
+
+  100% {
+    top: 17%;
+    transform: rotate(360deg);
+  }
+}
+
+/* show the winning combo, with a rotating animation */
+
+.cell.in-win::after {
+  border-width: 10px;
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}

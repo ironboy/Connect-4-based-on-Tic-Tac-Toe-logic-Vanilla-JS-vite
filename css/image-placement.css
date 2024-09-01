@@ -1,0 +1,59 @@
+img[src="/images/black-coffee.png"] {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20vw;
+
+  @media(max-aspect-ratio:0.6) {
+    & {
+      bottom: 1vw;
+      left: 1vw;
+      width: 25vw;
+    }
+  }
+}
+
+img[src="/images/cappuchino.png"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 21vw;
+
+  @media(max-aspect-ratio:0.6) {
+    & {
+      top: 1vw;
+      right: 1vw;
+      width: 26vw;
+    }
+  }
+}
+
+img[src="/images/tea-with-lemon.png"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20vw;
+
+  @media(max-aspect-ratio:0.6) {
+    & {
+      top: 1vw;
+      left: 1vw;
+      width: 25vw;
+    }
+  }
+}
+
+img[src="/images/tea-with-cinnamon.png"] {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20vw;
+
+  @media(max-aspect-ratio:0.6) {
+    & {
+      bottom: 1vw;
+      right: 1vw;
+      width: 25vw;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+/* variables */
+:root {
+  --background-color: rgb(210, 184, 171);
+  --board-color: rgb(25, 67, 158);
+  --red-player: rgb(191, 20, 20);
+  --yellow-player: rgb(255, 213, 0);
+  --red-player-inset: rgb(87, 5, 5);
+  --yellow-player-inset: rgb(161, 103, 28);
+}
+
+/* box-sizing (inlcude padding and borders in widths and heights */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background-color);
+  color: rgb(255, 255, 255);
+  font-family: 'Bebas Neue';
+  display: flex;
+  height: 100vh;
+}
+
+main {
+  margin: auto;
+  position: relative;
+}

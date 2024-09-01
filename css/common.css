@@ -1,0 +1,59 @@
+@import 'button.css';
+
+h1 {
+  font-family: 'Protest Guerrilla';
+  font-size: max(4vw, 6vh);
+  text-align: center;
+  margin-top: -2vh;
+  margin-bottom: min(-1vw, -1.5vh);
+  color: #000;
+  letter-spacing: max(0.4vw, 0.6vh);
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+
+  span:nth-child(odd) {
+    color: var(--red-player);
+  }
+
+  span:nth-child(even) {
+    color: var(--yellow-player);
+  }
+}
+
+p {
+  font-family: 'Bebas Neue';
+  font-size: max(2vw, 3vh);
+  text-align: center;
+  background-color: #000;
+  margin-bottom: -1vw;
+  padding: 5px;
+}
+
+.buttons {
+  height: 56px;
+  margin-top: max(3vw, 5vh);
+  text-align: center;
+}
+
+.buttons .button:not(.button:nth-child(1)) {
+  margin-left: 40px;
+}
+
+/* hide all buttons except the ones in the dialog if the dialog is open*/
+body[dialogOpen="true"] .buttons:not(dialog .buttons) * {
+  display: none;
+}
+
+/* colors when asking for name */
+.name-info.X {
+  background-color: var(--red-player);
+  color: white;
+}
+
+.name-info.O {
+  background-color: var(--yellow-player);
+  color: #000;
+}
