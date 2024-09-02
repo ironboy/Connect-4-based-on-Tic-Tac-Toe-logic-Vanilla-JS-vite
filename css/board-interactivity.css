@@ -19,10 +19,7 @@ body[gameInProgress="true"] {
     .cell:nth-of-type(7n+7):hover~.cell:nth-of-type(7n+7) {
       &.first-free {
         &::before {
-          content: '?';
-          font-size: 6cqw;
-          padding-top: 1cqw;
-          color: white;
+          content: '';
           background-color: var(--red-player);
           opacity: 1;
           border: 10px dashed var(--background-color);
@@ -44,10 +41,7 @@ body[gameInProgress="true"] {
     .cell:nth-of-type(7n+7):hover~.cell:nth-of-type(7n+7) {
       &.first-free {
         &::before {
-          content: '?';
-          font-size: 6cqw;
-          padding-top: 1cqw;
-          color: black;
+          content: '';
           background-color: var(--yellow-player);
           opacity: 1;
           border: 10px dashed var(--background-color);
