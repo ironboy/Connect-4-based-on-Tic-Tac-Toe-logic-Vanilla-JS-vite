@@ -8,8 +8,12 @@ export default class WinCombo {
     this.cells = cells;
   }
 
+  numberOfColor(color) {
+    return this.cells.filter(cell => cell.content === color).length;
+  }
+
   isWin(color) {
-    return this.cells.filter(cell => cell.content === color).length === 4;
+    return this.numberOfColor(color) === 4;
   }
 
 }
