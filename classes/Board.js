@@ -1,5 +1,7 @@
+import WinChecker from './WinChecker.js';
 import Cell from './Cell.js';
 import sleep from './helpers/sleep.js';
+
 
 export default class Board {
 
@@ -8,6 +10,7 @@ export default class Board {
     this.matrix = [...new Array(6)].map((row, rowIndex) =>
       [...new Array(7)].map((column, columnIndex) => new Cell(rowIndex, columnIndex))
     );
+    this.winChecker = new WinChecker(this);
     // currentPlayer, whose turn is it?
     this.currentPlayerColor = 'X';
     // status of game (updated after each move)
@@ -32,7 +35,6 @@ export default class Board {
       this.gameOver ? '' : this.currentPlayerColor);
     document.body.setAttribute('gameInProgress',
       this.app.namesEntered && !this.gameOver);
-
     // render the board as html
     return /*html*/`<div class="board">
       ${this.matrix.map((row, rowIndex) =>
@@ -43,7 +45,8 @@ export default class Board {
           ? ' latest-move' : '')
         + (cell === ' ' && this.matrix[rowIndex + 1]?.[columnIndex] !== ' '
           ? ' first-free' : '')
-        + (this.winningCombo.includes('row' + rowIndex + 'column' + columnIndex)
+        + (this.winningCombo
+          .find(({ row, column }) => row === rowIndex && column === columnIndex)
           ? ' in-win' : '')
         }"
           onclick="makeMoveOnClick(${columnIndex})">
@@ -96,38 +99,7 @@ export default class Board {
   }
 
   winCheck() {
-    // m - a short alias for this.matrix
-    let m = this.matrix;
-    // represent ways you can win as offset from ONE position on the board
-    let offsets = [
-      [[0, 0], [0, 1], [0, 2], [0, 3]],   // horizontal win
-      [[0, 0], [1, 0], [2, 0], [3, 0]],   // vertical win
-      [[0, 0], [1, 1], [2, 2], [3, 3]],   // diagonal 1 win
-      [[0, 0], [1, -1], [2, -2], [3, -3]] // diagonal 2 win
-    ];
-    // loop through each player color, each position (row + column),
-    // each winType/offsets and each offset coordinate added to the position
-    // to check if someone has won :)
-    for (let color of 'XO') {
-      // r = row, c = column
-      for (let r = 0; r < m.length; r++) {
-        for (let c = 0; c < m[0].length; c++) {
-          // ro = row offset, co = column offset
-          for (let winType of offsets) {
-            let colorsInCombo = '', combo = [];
-            for (let [ro, co] of winType) {
-              colorsInCombo += (m[r + ro] || [])[c + co];
-              combo.push('row' + (r + ro) + 'column' + (c + co));
-            }
-            if (colorsInCombo === color.repeat(4)) {
-              this.winningCombo = combo; // remember the winning combo
-              return color;
-            }
-          }
-        }
-      }
-    }
-    return false;
+    return this.winChecker.winCheck();
   }
 
   // check for a draw/tie
