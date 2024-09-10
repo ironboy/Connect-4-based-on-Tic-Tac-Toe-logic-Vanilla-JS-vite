@@ -1,11 +1,12 @@
+import Cell from './Cell.js';
 import sleep from './helpers/sleep.js';
 
 export default class Board {
 
   constructor(app) {
     this.app = app;
-    this.matrix = [...new Array(6)].map(row =>
-      [...new Array(7)].map(column => ' ')
+    this.matrix = [...new Array(6)].map((row, rowIndex) =>
+      [...new Array(7)].map((column, columnIndex) => new Cell(rowIndex, columnIndex))
     );
     // currentPlayer, whose turn is it?
     this.currentPlayerColor = 'X';
@@ -65,21 +66,21 @@ export default class Board {
     // check that the column is between 0 and 6 - otherwise don't make the move
     if (column < 0 || column >= this.matrix[0].length) { return false; }
     // check that the column is not full - otherwise don't make the move
-    if (this.matrix[0][column] !== ' ') { return false; }
+    if (this.matrix[0][column].content !== ' ') { return false; }
 
     // make the move and animate it at the same time
     document.body.setAttribute('moveInProgress', true);
     this.latestMove = [];
     let row = 0;
-    while (row < 6 && this.matrix[row][column] === ' ') {
-      this.matrix[row][column] = this.currentPlayerColor;
+    while (row < 6 && this.matrix[row][column].content === ' ') {
+      this.matrix[row][column].content = this.currentPlayerColor;
       this.app.render();
       await sleep(50);
-      this.matrix[row][column] = ' ';
+      this.matrix[row][column].content = ' ';
       row++;
     }
     this.latestMove = [row - 1, column];
-    this.matrix[row - 1][column] = this.currentPlayerColor;
+    this.matrix[row - 1][column].content = this.currentPlayerColor;
 
     // check if someone has won or if it's a draw/tie and update properties
     this.winner = this.winCheck();
@@ -132,7 +133,7 @@ export default class Board {
   // check for a draw/tie
   drawCheck() {
     // if no one has won and no empty positions then it's a draw
-    return !this.winCheck() && !this.matrix.flat().includes(' ');
+    return !this.winCheck() && !this.matrix.flat().map(x => x.content).includes(' ');
   }
 
 }
