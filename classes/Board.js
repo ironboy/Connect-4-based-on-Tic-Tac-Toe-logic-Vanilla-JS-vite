@@ -26,7 +26,7 @@ export default class Board {
     // makeMove and if makeMove returns true
     // then call the app render method
     globalThis.makeMoveOnClick = async (column) =>
-      (await this.makeMove(this.currentPlayerColor, column))
+      (await this.makeMove(this.currentPlayerColor, column, true))
       && this.app.render();
 
     // set some statuses as attributes to the body
@@ -55,11 +55,17 @@ export default class Board {
     </div>`;
   }
 
-  async makeMove(color, column) {
+  async makeMove(color, column, fromClick) {
 
     let p = color === 'X' ? this.app.playerX : this.app.playerO;
-    console.log(p.smartBotMove());
 
+    // pause while dialog open
+    while (document.body.getAttribute('dialogOpen') === 'true') {
+      await sleep(1000);
+    }
+
+    // don't allow move from click if it's a bots turn
+    if (fromClick && p.type !== 'Human') { return; }
     // don't make a move if there is another move in progress
     if (document.body.getAttribute('moveInProgress') === 'true') { return; }
     // don't make any move if the game is over
@@ -81,7 +87,7 @@ export default class Board {
     let row = 0;
     while (row < 6 && this.matrix[row][column].content === ' ') {
       this.matrix[row][column].content = this.currentPlayerColor;
-      this.app.render();
+      this.app.render(true);
       await sleep(50);
       this.matrix[row][column].content = ' ';
       row++;
@@ -93,10 +99,13 @@ export default class Board {
     this.winner = this.winCheck();
     this.isADraw = this.drawCheck();
     // the game is over if someone has won or if it's a draw
-    this.gameOver = this.winner || this.isADraw;
+    this.gameOver = !!(this.winner || this.isADraw);
     // change the current player color, if the game is not over
     !this.gameOver
       && (this.currentPlayerColor = this.currentPlayerColor === 'X' ? 'O' : 'X');
+
+    this.initiateBotMove();
+
     // return true if the move could be made
     document.body.setAttribute('moveInProgress', false);
     return true;
@@ -110,6 +119,18 @@ export default class Board {
   drawCheck() {
     // if no one has won and no empty positions then it's a draw
     return !this.winCheck() && !this.matrix.flat().map(x => x.content).includes(' ');
+  }
+
+
+  initiateBotMove() {
+    // initiate bot move
+    let player = this.currentPlayerColor === 'X' ? this.app.playerX : this.app.playerO;
+    if (!this.gameOver && player && player.type !== 'Human') {
+      setTimeout(async () => {
+        await player.makeBotMove();
+        this.app.render();
+      }, 1);
+    }
   }
 
 }
