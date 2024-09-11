@@ -22,6 +22,10 @@ export default class Board {
   }
 
   render() {
+
+    let humanTurn = (this.currentPlayerColor === 'X'
+      ? this.app.playerX : this.app.playerO)?.type === 'Human'
+
     // create the event handler called on click:
     // makeMove and if makeMove returns true
     // then call the app render method
@@ -43,7 +47,8 @@ export default class Board {
           class="cell ${cell
         + (this.latestMove[0] === rowIndex && this.latestMove[1] === columnIndex
           ? ' latest-move' : '')
-        + (cell === ' ' && this.matrix[rowIndex + 1]?.[columnIndex] !== ' '
+        + (humanTurn && cell.content === ' '
+          && this.matrix[rowIndex + 1]?.[columnIndex].content !== ' '
           ? ' first-free' : '')
         + (this.winningCombo
           .find(({ row, column }) => row === rowIndex && column === columnIndex)

@@ -52,6 +52,7 @@ export default class App {
   }
 
   render() {
+    if (this.destroyed) { return; }
     let color = this.board.currentPlayerColor;
     let player = color === 'X' ? this.playerX : this.playerO;
     let name = player?.name || '';
@@ -102,7 +103,7 @@ export default class App {
       new App(this.playerX, this.playerO, playerToStart.color);
     }
     // start a-fresh with new players
-    globalThis.newPlayers = () => new App();
+    globalThis.newPlayers = () => { this.destroyed = true; new App(); }
   }
 
   renderPlayAgainButtons() {
