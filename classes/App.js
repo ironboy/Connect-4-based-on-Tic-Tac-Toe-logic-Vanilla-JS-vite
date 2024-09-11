@@ -13,7 +13,9 @@ export default class App {
     this.setPlayAgainGlobals();
     if (playerX && playerO) {
       this.playerX = playerX;
+      this.playerX.board = this.board; // update to new board
       this.playerO = playerO;
+      this.playerO.board = this.board; // update to new board
       this.namesEntered = true;
     }
     else { this.askForNames(); }
@@ -29,7 +31,7 @@ export default class App {
           ${color === 'X' ? 'red' : 'yellow'} player:</div>`);
       await sleep(500);
     }
-    this['player' + color] = new Player(playerName, color);
+    this['player' + color] = new Player(playerName, color, this.board);
     if (color === 'X') { this.askForNames('O'); return; }
     this.namesEntered = true;
     this.render();

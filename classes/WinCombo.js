@@ -16,4 +16,23 @@ export default class WinCombo {
     return this.numberOfColor(color) === 4;
   }
 
+  score(color) {
+    if (this.numberOfColor('X') > 0 && this.numberOfColor('O') > 0) {
+      return 0; // noone can win this combo, both players have pieces in it
+    }
+    let oppponentColor = color === 'X' ? 'O' : 'X';
+    // offense
+    for (let pieces of [4, 3, 2, 1, 0]) {
+      if (this.numberOfColor(color) === pieces) {
+        return pieces ** 100;
+      }
+    }
+    // defence
+    for (let pieces of [4, 3, 2, 1, 0]) {
+      if (this.numberOfColor(oppponentColor) === pieces) {
+        return pieces ** 100;
+      }
+    }
+  }
+
 }

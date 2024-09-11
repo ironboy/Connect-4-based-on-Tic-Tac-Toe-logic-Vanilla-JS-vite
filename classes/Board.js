@@ -56,6 +56,10 @@ export default class Board {
   }
 
   async makeMove(color, column) {
+
+    let p = color === 'X' ? this.app.playerX : this.app.playerO;
+    console.log(p.smartBotMove());
+
     // don't make a move if there is another move in progress
     if (document.body.getAttribute('moveInProgress') === 'true') { return; }
     // don't make any move if the game is over
