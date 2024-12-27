@@ -3,14 +3,18 @@ import Board from './Board.js';
 import Player from './Player.js';
 import sleep from './helpers/sleep.js';
 
-// Set fast to true to disable animations and our bots 'fake' time to think
-// Set autoPlayAgain to true to automatically answer 'Yes' on Play again question
+// - Set fast to true to disable animations and our bots 'fake' time to think
+// - Set saveLog to true to save a log to the logs folder
+// - Set autoPlayAgain to true to automatically answer 'Yes' on Play again question
 Object.assign(globalThis, {
   fast: true,
-  autoPlayAgain: false
+  saveLog: true,
+  autoPlayAgain: true
 });
 
 export default class App {
+
+  static log = {};
 
   constructor(playerX, playerO, whoStarts = 'X') {
     this.dialog = new Dialog();
@@ -76,10 +80,10 @@ export default class App {
         ${!this.board.winner ? '' : `<p class="name-info ${color}">${name} won!</p>`}
       `}
       ${this.board.render()}
-       <div class="buttons">
+      <div class="buttons">
         ${!this.board.gameOver ?
         this.renderquitButton() :
-        this.renderPlayAgainButtons()}
+        this.renderPlayAgainButtons(name)}
       </div>
     `;
   }
@@ -115,7 +119,18 @@ export default class App {
     globalThis.newPlayers = () => { this.destroyed = true; new App(); }
   }
 
-  renderPlayAgainButtons() {
+  renderPlayAgainButtons(name) {
+    App.log[new Date().toLocaleString()] = {
+      result: this.board.winner ? name + ' won' : 'Tie',
+      moves: this.board.moveLog
+    }
+    if (globalThis.saveLog) {
+      fetch('/api/save-log', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(App.log),
+      })
+    }
     if (globalThis.autoPlayAgain) { globalThis.playAgain(); }
     // why not use the button element? 
     // div tags are easier to style in a cross-browser-compatible way
