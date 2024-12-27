@@ -28,8 +28,14 @@ app.get('*', (_req, res) => {
 
 // save log
 app.post('/api/save-log', (req, res) => {
+  let logFolder = path.join(__dirname, '..', 'logs');
+  // create the logs folder if it  doesn't exist
+  if (!fs.existsSync(logFolder)) {
+    fs.mkdirSync(logFolder);
+  }
+  // save the log
   fs.writeFileSync(
-    path.join(__dirname, '..', 'logs',
+    path.join(logFolder,
       Object.keys(req.body)[0].replaceAll(' ', '-').replaceAll(':', '-') + '.json'),
     JSON.stringify(req.body, null, '  '),
     'utf-8'
