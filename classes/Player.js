@@ -1,3 +1,4 @@
+import PerfectSolverBridge from './PerfectSolverBridge.js';
 import sleep from './helpers/sleep.js';
 
 export default class Player {
@@ -12,14 +13,14 @@ export default class Player {
   }
 
   async makeBotMove() {
-    await sleep(500);
-    this.type === 'A dumb bot' && await this.board.makeMove(this.color, this.dumbBotMove());
-    this.type === 'A smart bot' && await this.board.makeMove(this.color, this.smartBotMove());
-  }
-
-  dumbBotMove() {
-    // choose among legal moves (columns) randomnly
-    return this.shuffleArray(this.legalMoves).shift();
+    !window.fast && await sleep(500);
+    this.type === 'Our bot'
+      && await this.board.makeMove(this.color, this.smartBotMove());
+    this.type === 'The perfect solver'
+      && await this.board.makeMove(
+        this.color,
+        await PerfectSolverBridge.makeMove(this.board, this.shuffleArray)
+      );
   }
 
   smartBotMove() {

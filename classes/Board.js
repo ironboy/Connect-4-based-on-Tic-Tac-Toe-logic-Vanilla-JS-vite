@@ -7,6 +7,7 @@ export default class Board {
 
   constructor(app) {
     this.app = app;
+    this.moveLog = [];
     this.matrix = [...new Array(6)].map((row, rowIndex) =>
       [...new Array(7)].map((column, columnIndex) => new Cell(rowIndex, columnIndex))
     );
@@ -86,6 +87,20 @@ export default class Board {
     // check that the column is not full - otherwise don't make the move
     if (this.matrix[0][column].content !== ' ') { return false; }
 
+    // log the move
+    let { name, type } = p;
+    this.moveLog.push({
+      moveNo: this.moveLog.length + 1,
+      color,
+      name,
+      type,
+      column: column + 1,
+      timeTakenMs: Date.now() - this.lastNow
+    });
+    this.lastNow = Date.now();
+    console.clear();
+    console.log(JSON.stringify(this.moveLog, null, '  '));
+
     // make the move and animate it at the same time
     document.body.setAttribute('moveInProgress', true);
     this.latestMove = [];
@@ -93,7 +108,7 @@ export default class Board {
     while (row < 6 && this.matrix[row][column].content === ' ') {
       this.matrix[row][column].content = this.currentPlayerColor;
       this.app.render(true);
-      await sleep(50);
+      !window.fast && await sleep(50);
       this.matrix[row][column].content = ' ';
       row++;
     }

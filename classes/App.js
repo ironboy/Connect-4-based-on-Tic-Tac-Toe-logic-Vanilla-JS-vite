@@ -3,6 +3,13 @@ import Board from './Board.js';
 import Player from './Player.js';
 import sleep from './helpers/sleep.js';
 
+// Set fast to true to disable animations and our bots 'fake' time to think
+// Set autoPlayAgain to true to automatically answer 'Yes' on Play again question
+Object.assign(globalThis, {
+  fast: true,
+  autoPlayAgain: false
+});
+
 export default class App {
 
   constructor(playerX, playerO, whoStarts = 'X') {
@@ -17,6 +24,7 @@ export default class App {
       this.playerO = playerO;
       this.playerO.board = this.board; // update to new board
       this.namesEntered = true;
+      this.board.lastNow = Date.now();
       this.board.initiateBotMove();
     }
     else { this.askForNamesAndTypes(); }
@@ -34,13 +42,14 @@ export default class App {
       playerType = await this.dialog.ask(
           /*html*/`<div class="name-info ${color}">Which type of player is 
          ${playerName} ?</div>`,
-        ['Human', 'A dumb bot', 'A smart bot']
+        ['Human', 'Our bot', 'The perfect solver']
       );
     }
     this['player' + color] = new Player(playerName, color, playerType, this.board);
     if (color === 'X') { this.askForNamesAndTypes('O'); return; }
     this.namesEntered = true;
     this.render();
+    this.board.lastNow = Date.now();
     this.board.initiateBotMove();
   }
 
@@ -98,7 +107,7 @@ export default class App {
     // play again 
     globalThis.playAgain = async () => {
       let playerToStart = this.whoStarts === 'X' ? this.playerO : this.playerX;
-      await this.dialog.ask(
+      !globalThis.autoPlayAgain && await this.dialog.ask(
         `It's ${this.namePossesive(playerToStart.name)} turn to start!`, ['OK']);
       new App(this.playerX, this.playerO, playerToStart.color);
     }
@@ -107,6 +116,7 @@ export default class App {
   }
 
   renderPlayAgainButtons() {
+    if (globalThis.autoPlayAgain) { globalThis.playAgain(); }
     // why not use the button element? 
     // div tags are easier to style in a cross-browser-compatible way
     return /*html*/`
